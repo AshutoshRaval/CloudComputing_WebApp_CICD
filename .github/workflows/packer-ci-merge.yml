@@ -41,15 +41,20 @@ jobs:
       - name: Run Integration Tests
         run: npm test
 
-      - name: Build Application Artifact
-        run: |
-          # Replace these commands with the actual build commands for webapp.zip
-          # For example, if your build command is 'npm run build', use that here.
-          # Make sure it generates the webapp.zip file.
-          npm run build
-          # If the above command generates the webapp.zip file in a specific directory,
-          # adjust the next line accordingly.
-          mv path/to/generated/webapp.zip .
+
+      # - name: Build Application Artifact
+      #   run: |
+      #     # Replace these commands with the actual build commands for webapp.zip
+      #     # For example, if your build command is 'npm run build', use that here.
+      #     # Make sure it generates the webapp.zip file.
+      #     npm run build
+      #     # If the above command generates the webapp.zip file in a specific directory,
+      #     # adjust the next line accordingly.
+      #     mv path/to/generated/webapp.zip .
+
+      - name: Download webapp repository
+        run: zip -r webapp.zip ./
+
 
       - name: Configure AWS Credentials
         run: |

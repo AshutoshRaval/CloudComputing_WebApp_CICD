@@ -1,9 +1,47 @@
+# name: Packer CI
+
+# on:
+#   pull_request:
+#     paths:
+#       - '**/*.hcl'
+
+# jobs:
+#   packer-checks:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
+
+#       - name: Setup Packer
+#         uses: hashicorp/setup-packer@main
+#         with:
+#           packer_version: '1.8.6'
+
+#       - name: Initialize Packer
+#         run: packer init .
+
+#       - name: Run `packer fmt`
+#         run: |
+#           packer fmt -check aws-debian.pkr.hcl
+
+#       - name: Run `Build the webapp artifact`
+#         run: |
+#           packer fmt -check aws-debian.pkr.hcl
+
+#       - name: Run `packer validate`
+#         run: |
+#           packer validate aws-debian.pkr.hcl
+
+# # adD
+
+
 name: Packer CI
 
 on:
-  pull_request:
-    paths:
-      - '**/*.hcl'
+  workflow_run:
+    workflows: ["Node.js Ashutosh_WorkFlow"] # Specify the name of your ci.yml workflow
+    types:
+      - completed
 
 jobs:
   packer-checks:
@@ -32,4 +70,3 @@ jobs:
         run: |
           packer validate aws-debian.pkr.hcl
 
-# adD

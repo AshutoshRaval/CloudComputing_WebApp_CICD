@@ -128,6 +128,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Download webapp repository
+        run: zip -r webapp.zip ./
+
       - name: Setup Packer
         uses: hashicorp/setup-packer@main
         with:

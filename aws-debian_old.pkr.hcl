@@ -1,0 +1,66 @@
+variable "aws_profile" {
+  type    = string
+  default = "dev"
+}
+
+variable "region" {
+  type    = string
+  default = "us-east-1"
+}
+
+variable "source_ami_owner" {
+  type = string
+
+  default = "372558015288" # Adjusted with the provided owner ID 372558015288
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+
+variable "ssh_username" {
+  type    = string
+  default = "admin"
+}
+
+locals { timestamp = regex_replace(timestamp(), "[- TZ:]", "") }
+
+packer {
+  required_plugins {
+    amazon = {
+      source  = "github.com/hashicorp/amazon"
+      version = "~> 1"
+    }
+  }
+}
+
+source "amazon-ebs" "webapp" {
+
+  profile       = var.aws_profile
+  ami_name      = "webapp-ami-${local.timestamp}"
+  instance_type = var.instance_type
+  region        = var.region
+
+  source_ami   = "ami-06db4d78cb1d3bbf9"
+  ssh_username = var.ssh_username
+}
+
+build {
+  sources = ["source.amazon-ebs.webapp"]
+
+  provisioner "shell" {
+    inline = [
+      "sudo apt update",
+      "sudo apt -y upgrade",
+      "sudo apt -y install nodejs npm mariadb-server mariadb-client",
+      "sudo systemctl start mariadb",
+      "sudo systemctl enable mariadb",
+      # ... additional steps if needed ...
+    ]
+  }
+
+  provisioner "shell" {
+    script = "./setup-database.sh"
+  }
+}

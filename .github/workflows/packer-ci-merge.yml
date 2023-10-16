@@ -41,6 +41,7 @@ jobs:
       - name: Run Integration Tests
         run: npm test
 
+
       # - name: Build Application Artifact
       #   run: |
       #     # Replace these commands with the actual build commands for webapp.zip
@@ -53,6 +54,7 @@ jobs:
 
       - name: Download webapp repository
         run: zip -r webapp.zip ./
+
 
       - name: Configure AWS Credentials
         run: |

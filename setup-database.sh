@@ -58,6 +58,7 @@ else
     echo "MariaDB started and enabled."
 fi
 
+
 # Create a database if it doesn't exist
 DB_NAME="TestDataBase1"
 
@@ -71,4 +72,3 @@ else
     echo "Database $DB_NAME created."
 fi
 
-# You may further install and configure your web application below this line

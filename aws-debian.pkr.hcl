@@ -52,15 +52,15 @@ build {
   provisioner "shell" {
     inline = [
 
-       "sudo apt update",
-       "sudo apt -y upgrade",
-       "sudo apt -y install nodejs npm mariadb-server mariadb-client",
-       "sudo systemctl start mariadb",
-       "sudo systemctl enable mariadb",
-       "mysql -u root -e 'CREATE DATABASE TestDataBase1;'",
-       "mysql -u root -e 'ALTER USER ''root''@''localhost'' IDENTIFIED BY ''root'';'",
-       "mysql -u root -e 'GRANT ALL PRIVILEGES ON TestDataBase1.* TO ''root''@''localhost'';'",
-       "mysql -u root -e 'FLUSH PRIVILEGES;'"
+      "sudo apt update",
+      "sudo apt -y upgrade",
+      "sudo apt -y install nodejs npm mariadb-server mariadb-client",
+      "sudo systemctl start mariadb",
+      "sudo systemctl enable mariadb",
+      "mysql -u root -e 'CREATE DATABASE TestDataBase1;'",
+      "mysql -u root -e 'ALTER USER ''root''@''localhost'' IDENTIFIED BY ''root'';'",
+      "mysql -u root -e 'GRANT ALL PRIVILEGES ON TestDataBase1.* TO ''root''@''localhost'';'",
+      "mysql -u root -e 'FLUSH PRIVILEGES;'"
 
     ]
   }
@@ -81,7 +81,7 @@ build {
       "cd /tmp",
       "unzip webapp.zip", # Unzip the webapp.zip
       "npm install",      # Install dependencies
-      "node server.js"       # Start the server
+      "node server.js"    # Start the server
     ]
   }
 

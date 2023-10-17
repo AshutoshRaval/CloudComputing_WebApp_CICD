@@ -25,6 +25,7 @@ sudo systemctl enable mariadb
 
 # Setup database and user for your web app
 # Remember to replace [YourRootPassword] and [YourDBName] accordingly.
+
 sudo mysql -u  <<EOF
 CREATE DATABASE TestDataBase1;
 GRANT ALL PRIVILEGES ON TestDataBase1.* TO 'root'@'localhost' IDENTIFIED BY 'root';

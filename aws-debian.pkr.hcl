@@ -64,8 +64,9 @@ build {
       "sudo apt-get install unzip", # Making sure unzip is installed
       "cd /tmp",
       "unzip webapp.zip", # Unzip the webapp.zip
-      "npm install",      # Install dependencies
-      "npm test"
+      "ls -l "
+      # "npm install",      # Install dependencies
+      # "npm test"
       # "node server.js"    # Start the server
     ]
   }

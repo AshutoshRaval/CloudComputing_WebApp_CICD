@@ -65,9 +65,9 @@ build {
       "cd /tmp",
       "unzip webapp.zip", # Unzip the webapp.zip
       "ls -l "
-      # "npm install",      # Install dependencies
+       "npm install",      # Install dependencies
       # "npm test"
-      # "node server.js"    # Start the server
+       "node server.js"    # Start the server
     ]
   }
 

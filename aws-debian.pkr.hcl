@@ -55,10 +55,10 @@ build {
       "sudo apt -y upgrade",
       "sudo apt -y install nodejs npm mariadb-server mariadb-client",
       "sudo systemctl start mariadb",
-      "sudo systemctl enable mariadb"
+      "sudo systemctl enable mariadb",
       "mysql -u root -e 'CREATE DATABASE TestDataBase1;'",
       "mysql -u root -e 'GRANT ALL PRIVILEGES ON TestDataBase1.* TO ''root''@''localhost'' IDENTIFIED BY ''root'';'",
-      "mysql -u root -e 'FLUSH PRIVILEGES;'",
+      "mysql -u root -e 'FLUSH PRIVILEGES;'"
     ]
   }
 

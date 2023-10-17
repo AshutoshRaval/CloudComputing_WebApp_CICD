@@ -41,6 +41,7 @@ jobs:
       - name: Run Integration Tests
         run: npm test
 
+
       # - name: Build Application Artifact
       #   run: |
       #     # Replace these commands with the actual build commands for webapp.zip
@@ -53,13 +54,6 @@ jobs:
 
       - name: Download webapp repository
         run: zip -r webapp.zip ./
-
-      # - name: Configure AWS Credentials
-      #   run: |
-      #     aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws configure set default.region us-east-1  # Replace with your desired AWS region
-      #     aws configure set default.output json
 
       - name: Configure AWS Credentials
         run: |

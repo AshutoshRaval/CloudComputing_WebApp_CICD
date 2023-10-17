@@ -50,7 +50,7 @@ jobs:
       #     npm run build
       #     # If the above command generates the webapp.zip file in a specific directory,
       #     # adjust the next line accordingly.
-      #     mv path/to/generated/webapp.zip .
+      #     mv path/to/generated/webapp.zip . 4444
 
       - name: Download webapp repository
         run: zip -r webapp.zip ./

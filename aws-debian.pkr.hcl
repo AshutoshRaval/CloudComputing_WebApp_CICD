@@ -71,7 +71,7 @@ build {
   provisioner "shell" {
     inline = [
       "sudo apt-get install unzip", # Making sure unzip is installed
-      "cd /TestingFolder",
+      "cd /tmp",
       "unzip webapp.zip", # Unzip the webapp.zip
       "npm install",      # Install dependencies
       "npm start &"       # Start the server

@@ -68,7 +68,7 @@ else
     sudo mysql -u root -proot -e "CREATE DATABASE $DB_NAME;"
     sudo mysql -u root -proot -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO 'root'@'localhost' IDENTIFIED BY 'root';"
     sudo mysql -u root -proot -e "FLUSH PRIVILEGES;"
-    
+
 
     echo "Database $DB_NAME created."
 fi

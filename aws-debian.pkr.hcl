@@ -64,7 +64,8 @@ build {
 
   # provisioner "shell" {
   #   script = "./setup-database.sh"
-  # }
+  # }kk
+
 
   provisioner "file" {
     source      = "webapp.zip"

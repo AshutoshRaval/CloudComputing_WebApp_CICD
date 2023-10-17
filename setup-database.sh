@@ -70,4 +70,5 @@ else
     sudo mysql -u root -proot -e "FLUSH PRIVILEGES;"
     sudo mysql -u root -proot -e "SHOW DATABASES;"
     echo "Database $DB_NAME created."
+
 fi

@@ -66,6 +66,7 @@ build {
   #   script = "./setup-database.sh"
   # }kk
 
+
   provisioner "file" {
     source      = "webapp.zip"
     destination = "/tmp/webapp.zip"

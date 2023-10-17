@@ -58,7 +58,6 @@ else
     echo "MariaDB started and enabled."
 fi
 
-
 # Create a database if it doesn't exist
 DB_NAME="TestDataBase1"
 
@@ -69,6 +68,7 @@ else
     sudo mysql -u root -p root -e "CREATE DATABASE $DB_NAME;"
     sudo mysql -u root -p root -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO 'root'@'localhost' IDENTIFIED BY 'root';"
     sudo mysql -u root -p root -e "FLUSH PRIVILEGES;"
+
     echo "Database $DB_NAME created."
 fi
 

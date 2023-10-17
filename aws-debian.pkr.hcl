@@ -51,6 +51,7 @@ build {
 
   provisioner "shell" {
     inline = [
+
        "sudo apt update",
        "sudo apt -y upgrade",
        "sudo apt -y install nodejs npm mariadb-server mariadb-client",
@@ -60,6 +61,7 @@ build {
        "mysql -u root -e 'ALTER USER ''root''@''localhost'' IDENTIFIED BY ''root'';'",
        "mysql -u root -e 'GRANT ALL PRIVILEGES ON TestDataBase1.* TO ''root''@''localhost'';'",
        "mysql -u root -e 'FLUSH PRIVILEGES;'"
+
     ]
   }
 

@@ -28,6 +28,7 @@ echo "Database user: $DB_USER"
 #   exit 1
 # fi
 
+
 # You can use the variables in your script
 # For example:
 # mysql -u $DB_USER -p$DB_PASSWORD -e "USE $DB_NAME; SELECT * FROM table_name;"

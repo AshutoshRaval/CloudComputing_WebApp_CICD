@@ -75,7 +75,7 @@ build {
       # "ls -l ",
       "npm install", # Install dependencies
       # "npm test"
-      # "node server.js" # Start the server
+      "node server.js" # Start the server
     ]
   }
 

@@ -43,7 +43,7 @@ source "amazon-ebs" "webapp" {
 
   source_ami   = "ami-06db4d78cb1d3bbf9"
   ssh_username = var.ssh_username
-  ami_users    = ["822421370804"] # Replace with the DEMO AWS Account ID 822421370804 112ss
+  ami_users    = ["822421370804"] # Replace with the DEMO AWS Account ID 822421370804 112ss822421370804
 }
 
 build {
@@ -56,18 +56,18 @@ build {
 
   provisioner "file" {
     source      = "webapp.zip"
-    destination = "/tmp/webapp.zip"
+    destination = "/Test/webapp.zip"
   }
 
   provisioner "shell" {
     inline = [
       "sudo apt-get install unzip", # Making sure unzip is installed
-      "cd /tmp",
+      "cd /Test",
       "unzip webapp.zip", # Unzip the webapp.zip
       "ls -l ",
       "npm install", # Install dependencies
       # "npm test"
-      "node server.js" # Start the server
+      # "node server.js" # Start the server
     ]
   }
 

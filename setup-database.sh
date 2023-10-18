@@ -6,26 +6,12 @@
 #   echo ".env file not found. Make sure to create it."
 #   exit 1
 # fi
-
-
+source .env
+echo "Database name: $DB_NAME"
+echo "Database user: $DB_USER"
 #!/bin/bash
 
-ENV_FILE="./.env"
 
-
-if [ -f "$ENV_FILE" ]; then
-  while IFS= read -r line; do
-    export "$line"
-  done < "$ENV_FILE"
-  echo "Read variables from .env file successfully."
-  # Now you can access the variables defined in .env
-  echo "DB_NAME: $DB_NAME"
-  echo "DB_USER: $DB_USER"
-  # ...
-else
-  echo ".env file not found. Make sure to create it."
-  exit 1
-fi
 
 # You can use the variables in your script
 # For example:

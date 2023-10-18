@@ -56,14 +56,14 @@ build {
 
   provisioner "file" {
     source      = "webapp.zip"
-    destination = "/home/admin/test/webapp.zip"
+    destination = "/home/admin/webapp.zip"
 
   }
 
   provisioner "shell" {
     inline = [
       "sudo apt-get install unzip", # Making sure unzip is installed
-      "cd /home/admin/test",
+      "cd /home/admin",
 
       "unzip webapp.zip", # Unzip the webapp.zip
       "ls -l ",

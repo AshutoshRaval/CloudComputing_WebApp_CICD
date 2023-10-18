@@ -35,7 +35,7 @@ if sudo mysql -u root -e "USE $DB_NAME" 2>/dev/null; then
 else
     echo "Creating database $DB_NAME..."
     sudo mysql -u root -p"$DB_PASSWORD" -e "CREATE DATABASE $DB_NAME;"
-    sudo mysql -u root -p"$DB_PASSWORD" -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';"
+    sudo mysql -u root -p"$DB_PASSWORD" -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO 'root'@'localhost' IDENTIFIED BY 'root';"
     sudo mysql -u root -p"$DB_PASSWORD" -e "FLUSH PRIVILEGES;"
     sudo mysql -u root -p"$DB_PASSWORD" -e "SHOW DATABASES;"
     echo "Database $DB_NAME created."

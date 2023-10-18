@@ -79,6 +79,6 @@ jobs:
       #   working-directory: .
       #   continue-on-error: true  # Ignore errors if the AMI ID is not found
 
-      - name: Share AMI with DEMO Account
-        run: |
-          aws ec2 modify-image-attribute --image-id $AMI_ID --launch-permission "{\"Add\":[{\"UserId\":\"822421370804\"}]}"
+      # - name: Share AMI with DEMO Account
+      #   run: |
+      #     aws ec2 modify-image-attribute --image-id $AMI_ID --launch-permission "{\"Add\":[{\"UserId\":\"822421370804\"}]}"

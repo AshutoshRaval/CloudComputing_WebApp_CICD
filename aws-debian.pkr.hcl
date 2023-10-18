@@ -49,17 +49,23 @@ source "amazon-ebs" "webapp" {
 build {
   sources = ["source.amazon-ebs.webapp"]
 
-  provisioner "shell" {
-    script = "./setup-database.sh"
-  }
+  # provisioner "shell" {
+  #   script = "./setup-database.sh"
+  # }
 
 
   provisioner "file" {
+
     source = "webapp.zip"
 
     destination = "/home/admin/webapp.zip"
 
   }
+
+  provisioner "shell" {
+    script = "./setup-database.sh"
+  }
+
 
   provisioner "shell" {
     inline = [
@@ -69,7 +75,7 @@ build {
       "ls -l ",
       "npm install", # Install dependencies
       # "npm test"
-      # "node server.js" # Start the server
+      "node server.js" # Start the server
     ]
   }
 

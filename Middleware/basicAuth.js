@@ -14,7 +14,7 @@ const basicAuth = async (req, res, next) => {
  
             if (!user) {
                 
-                return res.status(401).json({ message: 'Authentication failed' });
+                return res.status(401).json({ message: 'Authentication failed, credentials incorrect' });
             }
 
             const hashedPassword = await bcrypt.hash(password, 10)
@@ -23,7 +23,7 @@ const basicAuth = async (req, res, next) => {
 
             if (!isValidPassword) {
                 console.log('Please give correct Credentials')
-                return res.status(401).json({ message: 'Authentication failed' });
+                return res.status(401).json({ message: 'Authentication failed, credential incorrect' });
             }
             
             req.user = user;

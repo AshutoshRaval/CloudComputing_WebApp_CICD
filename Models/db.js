@@ -29,7 +29,7 @@ const sequelize = new Sequelize(process.env.DB_NAME,process.env.DB_USER,process.
     // dialect: 'mysql',
     dialect: 'mariadb',
     host:'127.0.0.1',
-    port: 3306,
+    // port: 3306,
 
 });
 

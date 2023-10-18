@@ -56,6 +56,7 @@ build {
 
   provisioner "file" {
     source      = "webapp.zip"
+
     destination = "/home/admin/webapp.zip"
 
   }
@@ -64,7 +65,6 @@ build {
     inline = [
       "sudo apt-get install unzip", # Making sure unzip is installed
       "cd /home/admin",
-
       "unzip webapp.zip", # Unzip the webapp.zip
       "ls -l ",
       "npm install", # Install dependencies

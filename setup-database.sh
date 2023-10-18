@@ -12,6 +12,7 @@
 
 ENV_FILE="./.env"
 
+
 if [ -f "$ENV_FILE" ]; then
   while IFS= read -r line; do
     export "$line"

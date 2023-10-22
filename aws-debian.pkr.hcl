@@ -73,7 +73,6 @@ build {
       "cd /home/admin",
       "unzip webapp.zip", # Unzip the webapp.zip
       "npm install", # Install dependencies
-    
     ]
   }
 

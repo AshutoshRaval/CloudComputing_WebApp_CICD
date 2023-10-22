@@ -48,10 +48,10 @@ exports.getAssignmentById = async (req, res) => {
                 deadline: assg.deadline,
                 assignmentCreated: assg.assignment_created,
                 assignmentUpdated: assg.assignment_updated,
-                userId: assg.userId,
-                useremail: assg.user.email,
-                userFName: assg.user.first_name,
-                userLName: assg.user.last_name // This will have the associated user details
+                // userId: assg.userId,
+                // useremail: assg.user.email,
+                // userFName: assg.user.first_name,
+                // userLName: assg.user.last_name // This will have the associated user details
             }
         };
 

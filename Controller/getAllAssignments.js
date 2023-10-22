@@ -13,11 +13,11 @@ exports.getAllAssignments = async (req, res) => {
         const userId = req.user.id;
         const assignments = await Assignment1.findAll({
             // where: { userId: userId },
-            include: [{
-                model: User,
-                as: 'user',
-                attributes: ['id', 'first_name', 'last_name', 'email']
-            }]
+            // include: [{
+            //     model: User,
+            //     as: 'user',
+            //     attributes: ['id', 'first_name', 'last_name', 'email']
+            // }]
         });
 
         if (!assignments || assignments.length === 0) {

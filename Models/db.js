@@ -27,10 +27,19 @@ const Sequelize = require('sequelize');
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
+
+console.log("---------")
+console.log(process.env.DB_NAME);
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);
+console.log(process.env.DB_HOST);
+console.log("---------")
+
+
 const sequelize = new Sequelize(process.env.DB_NAME,process.env.DB_USER,process.env.DB_PASSWORD,{
     // dialect: 'mysql',
     dialect: 'mariadb',
-    host:'127.0.0.1',
+    host: process.env.DB_HOST,
     // port: 3306,
 
 });

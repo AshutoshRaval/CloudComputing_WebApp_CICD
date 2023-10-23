@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # # Update and upgrade the system
 sudo apt update && sudo apt -y upgrade
 
@@ -38,6 +37,4 @@ sudo apt update && sudo apt -y upgrade
 
 
 sudo mv /tmp/webapp.service /etc/systemd/system/
-
 sudo systemctl enable webapp
-

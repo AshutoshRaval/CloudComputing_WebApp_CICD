@@ -43,41 +43,40 @@ source "amazon-ebs" "webapp" {
 
   source_ami   = "ami-06db4d78cb1d3bbf9"
   ssh_username = var.ssh_username
-  ami_users    = ["822421370804"] 
+  ami_users    = ["822421370804"]
 }
 
 build {
   sources = ["source.amazon-ebs.webapp"]
 
   provisioner "file" {
-    source = "webapp.zip"
+    source      = "webapp.zip"
     destination = "/home/admin/webapp.zip"
 
   }
 
-  provisioner "shell"  {
-    "type": "file",
-    "source": "./webapp.service",
-    "destination": "/tmp/webapp.service"
+  provisioner "file" {
+    source      = "./webapp.service"
+    destination = "/tmp/webapp.service"
   }
 
   provisioner "shell" {
     script = "./setup-database.sh"
   }
 
-#testing
+  #testing
 
   provisioner "shell" {
     inline = [
       "sudo apt-get install unzip", # Making sure unzip is installed
       "cd /home/admin",
       "unzip webapp.zip", # Unzip the webapp.zip
-      "npm install", # Install dependencies
-    
+      "npm install",      # Install dependencies
+
     ]
   }
 
-  
+
 
 
   provisioner "shell" {

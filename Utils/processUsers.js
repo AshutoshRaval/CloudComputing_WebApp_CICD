@@ -29,7 +29,7 @@ const User1 = sequelize.models.User;
 const processUsers = async (users) => {
 
     console.log('In Process Users')
-    console.log(users)
+    // console.log(users)
     for (let userEntry  of users) {
 
         let userData = userEntry ['first_name,last_name,email,password'].split(',');
@@ -39,8 +39,8 @@ const processUsers = async (users) => {
             email: userData[2],
             password: userData[3]
         };
-        console.log(user.email)
-        console.log(user.password)
+        // console.log(user.email)
+        // console.log(user.password)
         // Hashing the password
         // user.password = bcrypt.hashSync(userData[3], 10);
 
@@ -49,7 +49,7 @@ const processUsers = async (users) => {
 
         const attributes = sequelize.models.User.rawAttributes;
         const fields = Object.keys(attributes);
-        console.log(fields);
+        // console.log(fields);
         // console.log(User1.f)
 
         

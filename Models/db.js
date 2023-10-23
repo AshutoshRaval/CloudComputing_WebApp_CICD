@@ -29,6 +29,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 console.log("---------")
+console.log(process.env.NODE_ENV);
 console.log(process.env.DB_NAME);
 console.log(process.env.DB_USER);
 console.log(process.env.DB_PASSWORD);

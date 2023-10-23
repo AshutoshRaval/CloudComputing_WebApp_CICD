@@ -4,6 +4,8 @@ sudo apt update && sudo apt -y upgrade
 
 # # Install Node.js, npm, MariaDB server, and client
 # sudo apt -y install nodejs npm mariadb-server mariadb-client
+sudo apt -y install nodejs npm
+
 
 # # Start and enable MariaDB
 # sudo systemctl start mariadb
@@ -37,4 +39,5 @@ sudo apt update && sudo apt -y upgrade
 
 
 sudo mv /tmp/webapp.service /etc/systemd/system/
+sudo systemctl daemon-reload
 sudo systemctl enable webapp

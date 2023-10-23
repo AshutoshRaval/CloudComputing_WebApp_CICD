@@ -23,8 +23,10 @@
 // module.exports = pool;
 
 const Sequelize = require('sequelize'); 
-require('dotenv').config();
-
+// Load dotenv only in development environment
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 const sequelize = new Sequelize(process.env.DB_NAME,process.env.DB_USER,process.env.DB_PASSWORD,{
     // dialect: 'mysql',
     dialect: 'mariadb',

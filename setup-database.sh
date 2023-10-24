@@ -7,6 +7,7 @@ sudo apt -y install nodejs npm mariadb-server mariadb-client
 # sudo apt -y install nodejs npm
 
 
+
 # # Start and enable MariaDB
 # sudo systemctl start mariadb
 # sudo systemctl enable mariadb

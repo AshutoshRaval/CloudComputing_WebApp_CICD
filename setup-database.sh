@@ -3,8 +3,9 @@
 sudo apt update && sudo apt -y upgrade
 
 # # Install Node.js, npm, MariaDB server, and client
-# sudo apt -y install nodejs npm mariadb-server mariadb-client
-sudo apt -y install nodejs npm
+sudo apt -y install nodejs npm mariadb-server mariadb-client
+# sudo apt -y install nodejs npm
+
 
 
 # # Start and enable MariaDB

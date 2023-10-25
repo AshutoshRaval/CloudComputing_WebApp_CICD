@@ -37,12 +37,12 @@ sudo apt -y install nodejs npm mariadb-server mariadb-client
 
 # fi
 
-sudo adduser ec2-user
-echo 'ec2-user:ec2User' | sudo chpasswd
-sudo usermod -aG ec2-user ec2-user
-sudo chmod +x /home/admin/server.js
+# sudo adduser ec2-user
+# echo 'ec2-user:ec2User' | sudo chpasswd
+# sudo usermod -aG ec2-user ec2-user
+# sudo chmod +x /home/admin/server.js
 
-sudo mv /tmp/webapp.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable webapp
-sudo systemctl start webapp
+# sudo mv /tmp/webapp.service /etc/systemd/system/
+# sudo systemctl daemon-reload
+# sudo systemctl enable webapp
+# sudo systemctl start webapp

@@ -55,12 +55,14 @@ build {
 
   }
 
-  provisioner "file" {
-    source      = "./webapp.service"
-    destination = "/tmp/webapp.service"
+  # provisioner "file" {
+  #   source      = "./webapp.service"
+  #   destination = "/tmp/webapp.service"
+  # }
+
+  provisioner "shell" {
+    script = "./setup-database.sh"
   }
-
-
 
   #testing
 
@@ -70,12 +72,15 @@ build {
       "cd /home/admin",
       "unzip webapp.zip", # Unzip the webapp.zip
       "npm install",      # Install dependencies
+      "sudo adduser ec2-user",
+      "echo 'ec2-user:ec2User' | sudo chpasswd",
+      "udo usermod -aG ec2-user ec2-user",
+      "sudo chmod +x /home/admin/server.js",
+      "sudo mv /tmp/webapp.service /etc/systemd/system/",
     ]
   }
 
-  provisioner "shell" {
-    script = "./setup-database.sh"
-  }
+
 
   provisioner "shell" {
     inline = [

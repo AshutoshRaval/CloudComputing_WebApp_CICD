@@ -1,3 +1,4 @@
+#!/usr/bin/node
 const app = require('./app');
 const sequelize = require('./Models/db');
 const loadUsersFromCSV = require('./Utils/csvLoaders');

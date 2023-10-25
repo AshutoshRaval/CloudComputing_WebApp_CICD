@@ -1,6 +1,5 @@
 [Unit]
 Description=Node.js Web Application
-After=network.target cloud-init.target
 Wants=cloud-init.target
 
 [Service]

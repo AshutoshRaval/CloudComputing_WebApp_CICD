@@ -60,9 +60,7 @@ build {
     destination = "/tmp/webapp.service"
   }
 
-  provisioner "shell" {
-    script = "./setup-database.sh"
-  }
+
 
   #testing
 
@@ -75,8 +73,9 @@ build {
     ]
   }
 
-
-
+  provisioner "shell" {
+    script = "./setup-database.sh"
+  }
 
   provisioner "shell" {
     inline = [

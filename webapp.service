@@ -1,12 +1,11 @@
 [Unit]
 Description=Node.js Web Application
-After=network.target cloud-init.target
 Wants=cloud-init.target
 
 [Service]
 EnvironmentFile=/etc/environment
 WorkingDirectory=/home/admin/
-ExecStart=/home/admin/server.js
+ExecStart=/usr/bin/node /home/admin/server.js
 Restart=always
 User=ec2-user
 Group=ec2-user

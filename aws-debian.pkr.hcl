@@ -60,9 +60,11 @@ build {
   #   destination = "/tmp/webapp.service"
   # }
 
+
   provisioner "shell" {
     script = "./setup-database.sh"
   } #sss
+
 
 
   #testingdddsdsdasd
@@ -80,7 +82,6 @@ build {
       "sudo mv /tmp/webapp.service /etc/systemd/system/",
     ]
   }
-
 
 
   provisioner "shell" {

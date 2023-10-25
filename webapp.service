@@ -8,8 +8,8 @@ EnvironmentFile=/etc/environment
 WorkingDirectory=/home/admin/
 ExecStart=/home/admin/server.js
 Restart=always
-User=ec2-user
-Group=ec2-user
+User=admin
+Group=admin
 Environment=PATH=/usr/bin:/usr/local/bin:/usr/local/node/bin
 
 [Install]

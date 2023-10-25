@@ -77,7 +77,7 @@ build {
       "npm install",      # Install dependencies
       "sudo adduser ec2-user",
       "echo 'ec2-user:ec2User' | sudo chpasswd",
-      "udo usermod -aG ec2-user ec2-user",
+      "sudo usermod -aG ec2-user ec2-user",
       "sudo chmod +x /home/admin/server.js",
       "sudo mv /tmp/webapp.service /etc/systemd/system/",
     ]

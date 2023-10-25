@@ -64,7 +64,7 @@ build {
     script = "./setup-database.sh"
   }
 
-  #testing
+  #testingddd
 
   provisioner "shell" {
     inline = [

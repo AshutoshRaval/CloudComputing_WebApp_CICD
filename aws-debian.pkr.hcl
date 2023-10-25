@@ -62,8 +62,7 @@ build {
 
   provisioner "shell" {
     script = "./setup-database.sh"
-  }
-
+  } #sss
 
 
   #testingdddsdsdasd

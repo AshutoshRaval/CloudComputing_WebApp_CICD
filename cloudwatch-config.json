@@ -1,0 +1,51 @@
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "run_as_user": "ec2-user"
+  },
+  "metrics": {
+    "append_dimensions": {
+      "AutoScalingGroupName": "${aws:AutoScalingGroupName}",
+      "InstanceId": "${aws:InstanceId}"
+    },
+    "metrics_collected": {
+      "disk": {
+        "measurement": [
+          "used_percent"
+        ],
+        "metrics_collection_interval": 60
+      },
+      "mem": {
+        "measurement": [
+          "mem_used_percent"
+        ],
+        "metrics_collection_interval": 60
+      },
+      "statsd": {
+        "service_address": ":8125",
+        "metrics_collection_interval": 10,
+        "metrics_aggregation_interval": 60
+      }
+    }
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/home/admin/error.log",
+            "log_group_name": "webapp-dev",
+            "log_stream_name": "instance-01-error-logs1",
+            "timezone": "Local"
+          },
+          {
+            "file_path": "/home/admin/combined.log",
+            "log_group_name": "webapp-dev",
+            "log_stream_name": "instance-01-combined-logs1",
+            "timezone": "Local"
+          }
+        ]
+      }
+    }
+  }
+}

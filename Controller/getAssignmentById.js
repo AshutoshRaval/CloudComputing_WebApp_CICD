@@ -1,6 +1,8 @@
 const  Assignment1  = require('../Models/Assignment');
 const User = require('../Models/User');  // Using the model file you've shared
 const sequelize = require('../Models/db');
+const statsd = require('../Utils/statsdClient');
+const logger = require('../Utils/logger');
 
 exports.getAssignmentById = async (req, res) => {
     try {
@@ -9,8 +11,8 @@ exports.getAssignmentById = async (req, res) => {
             return res.status(400).json({ message: 'Request body is not allowed in GET request' });
         }
         
-        const { id } = req.query;
-        const userId = req.user.id;
+        const id  = req.params.id;
+        // const userId = req.user.id;
         console.log(id)
     
         const attributes = Assignment1.rawAttributes;
@@ -32,6 +34,7 @@ exports.getAssignmentById = async (req, res) => {
             
         // Check if assignment exists
         if (!assg) {
+            logger.error(`Error in fetching assignment: ${error}`);
             return res.status(404).json({ message: 'Assignment not found' });
         }
         

@@ -13,6 +13,8 @@ const { getAssignmentById } = require('./Controller/getAssignmentById');
 const { getAllAssignments } = require('./Controller/getAllAssignments');
 const { deleteAssignmentById } = require('./Controller/deleteAssignmentById');
 const { updateAssignmentById } = require('./Controller/updateAssignmentById');
+const logger = require('./Utils/logger');
+const statsd = require('./Utils/statsdClient');
 // const { checkAssignmentapi } = require('./Controller/checkAssignmentapi')
 
 
@@ -20,43 +22,53 @@ const app = express();
 const PORT = 8080;
 
 app.use(bodyParser.json()); 
-// app.use(bodyParser.raw({ type: '*/*', limit: '10mb' }));
-
-// app.all('/healthz', checkHealth);
-// app.get('/healthz', healthz);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ error: 'Internal Server Error' });
 });
 
-// app.get('/api/assignment',basicAuth,getAssignmentById)
+
 
 // Below API create the assignment
 app.post('/v1/assignment', basicAuth, createAssignment);
-// app.get('/api/assignments', basicAuth,getAllAssignments);
+// app.post('/v1/assignment', basicAuth,(req, res, next) => {
+  
+//   return createAssignment(req, res, next);
+// } );
 
 //Below API Gets the assignment based on the ID or fecthes all the assignment
 app.get('/v1/assignment', basicAuth, (req, res, next) => {
-  if (req.query.id) {
+// app.get('v1/assignment/', basicAuth, (req, res, next) => {
       console.log('by Id')
-      return getAssignmentById(req, res, next);
-  }
+      logger.info(`Fetching assignment by ID: ${req.query.id}`);
+      statsd.increment('endpoint.hits.v1.assignment.byId');
+      return getAllAssignments(req, res, next);
+      //return getAssignmentById(req, res, next);
+});
+
+app.get('/v1/assignment/:id',basicAuth, (req, res, next) => {
+  logger.info('Fetching all assignments');
   console.log('All Assignment')
-  return getAllAssignments(req, res, next);
+  statsd.increment('endpoint.hits.v1.assignment.all');
+  return getAssignmentById(req, res, next);
 });
 
 //Below API delete all the assignment
-app.delete('/v1/assignment', basicAuth, deleteAssignmentById);
+app.delete('/v1/assignment/:id', basicAuth, deleteAssignmentById);
 
 //Below API update the assignment
-app.put('/v1/assignment', basicAuth, updateAssignmentById);
+app.put('/v1/assignment/:id', basicAuth, updateAssignmentById);
 
 app.get('/healthz', async (req, res) => {
   try {
-    console.log('healthz')
+    //console.log('healthz')
+    logger.info('healthz check initiated');
+    // statsd.gauge('database.connection_success', 1);
+    statsd.increment('endpoint.hits.v1.heathz.DB');
     await sequelize.authenticate(); // Check the database connectivity
-    
+    logger.info('Database connection has been established successfully.');
+
     res.status(200).set({
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'Pragma': 'no-cache',
@@ -64,8 +76,10 @@ app.get('/healthz', async (req, res) => {
     }).json({ status: 'ok' });
 
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
-
+    //console.error('Unable to connect to the database:', error);
+    logger.error(`Unable to connect to the database: ${error}`);
+    // statsd.gauge('database.connection_success', 1);
+    // statsd.increment('endpoint.hits.v1.heathz.DB');
     res.status(503).set({
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'Pragma': 'no-cache',
@@ -78,42 +92,7 @@ app.get('/healthz', async (req, res) => {
 app.patch('/v1/assignment', (req, res) => {
   res.status(405).json({ error: 'Method Not Allowed: Use PUT for full updates or specify fields to update with PATCH.' });
 });
-// app.all('/assignment', checkAssignmentapi);
+
 
 module.exports = app;
 
-// loadUsersFromCSV('../opt/users.csv')
-//     .then(users => {
-//         return processUsers(users);
-//     })
-//     .then(() => {
-//         console.log("Finished processing users.");
-        
-//         // Start the server after processing the users
-//         // app.listen(PORT, () => {
-//         //     console.log(`Server started on http://localhost:${PORT}`);
-//         // });
-//     })
-//     .catch(err => {
-//         console.error("Error:", err);
-//     });
-
-
-
-// User.hasMany(Assignment, { foreignKey: 'userId', as: 'assignments' });
-// Assignment.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-// sequelize.sync();
-
-
-
-
-
-// Users.sync().then(result =>{
-//   console.log(result)
-// }).catch(error => {
-//   console.error("Error syncing User Model with database:", error);
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`Server started on http://localhost:${PORT}`);
-// });

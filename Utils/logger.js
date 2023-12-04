@@ -32,4 +32,12 @@ if (process.env.NODE_ENV === 'production') {
   
 }
 
+if (process.env.DB_NAME === 'TestDataBase1') {
+  // if ('production' === 'production') {
+console.log('adding in log')
+logger.add(new winston.transports.File({ filename: 'error.log', level: 'error' }));
+logger.add(new winston.transports.File({ filename: 'combined.log' }));
+
+}
+
 module.exports = logger;

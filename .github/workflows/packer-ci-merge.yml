@@ -110,7 +110,6 @@ jobs:
           echo "Latest Launch Template Version: $LATEST_VERSION"
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
 
-
       - name: Update ASG to use the latest Launch Template version
         run: |
           ASG_NAME="app-auto-scaling-group"

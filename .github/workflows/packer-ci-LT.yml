@@ -36,15 +36,38 @@ jobs:
             echo "AMI ID: $AMI_ID"
             echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
 
+
+      - name: Get Security Group IDs
+        id: get_security_groups
+        run: |
+            # Replace 'your-security-group-names' with the names of your security groups separated by space
+            SECURITY_GROUP_NAMES="security-group-name-1 security-group-name-2"
+            SECURITY_GROUP_IDS=$(aws ec2 describe-security-groups --group-names $SECURITY_GROUP_NAMES --query "SecurityGroups[*].GroupId" --output text | tr '\t' ' ' | tr '\n' ' ')
+            echo "::set-output name=security_group_ids::$SECURITY_GROUP_IDS"
+
+      - name: Get Latest Launch Template Version
+        id: get_latest_version
+        run: |
+          LAUNCH_TEMPLATE_NAME="app-launch-template"
+          LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
+
  # aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
       - name: Update Launch Template with Latest AMI
         run: |
           echo "Using AMI ID: $AMI_ID" # For debugging: this line will output the AMI ID in the logs
           LAUNCH_TEMPLATE_ID=$(aws ec2 describe-launch-templates --query "LaunchTemplates[?LaunchTemplateName=='app-launch-template'].LaunchTemplateId" --output text)
+          LATEST_VERSION=${{ env.latest_version }}
           echo "Using Launch Template ID: $LAUNCH_TEMPLATE_ID" # For debugging
-          echo "Using Launch Template ID: $LATEST" # For debugging
-          INSTANCE_TYPE="t2.micro" 
-          aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\",\"InstanceType\":\"$INSTANCE_TYPE\"}"
+          echo "Using Launch Template ID: $LATEST_VERSION" # For debugging
+          aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST_VERSION" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
+          #INSTANCE_TYPE="t2.micro"
+          #KEY_PAIR_NAME="webappKeyPair" # Replace with your key pair name
+          #SECURITY_GROUP_IDS=$(echo "${{ steps.get_security_groups.outputs.security_group_ids }}")
+          # aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" \
+          # --source-version "$LATEST" \
+          # --launch-template-data "{\"ImageId\":\"$AMI_ID\",\"InstanceType\":\"$INSTANCE_TYPE\",\"KeyName\":\"$KEY_PAIR_NAME\",\"SecurityGroupIds\":[$SECURITY_GROUP_IDS]}"
+          # aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\",\"InstanceType\":\"$INSTANCE_TYPE\"}"
 
       - name: Retrieve latest Launch Template version
         run: |

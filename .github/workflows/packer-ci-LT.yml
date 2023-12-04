@@ -36,14 +36,6 @@ jobs:
             echo "AMI ID: $AMI_ID"
             echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
 
-      - name: Get Security Group IDs
-        id: get_security_groups
-        run: |
-            # Replace 'your-security-group-names' with the names of your security groups separated by space
-            SECURITY_GROUP_NAMES="security-group-name-1 security-group-name-2"
-            SECURITY_GROUP_IDS=$(aws ec2 describe-security-groups --group-names $SECURITY_GROUP_NAMES --query "SecurityGroups[*].GroupId" --output text | tr '\t' ' ' | tr '\n' ' ')
-            echo "::set-output name=security_group_ids::$SECURITY_GROUP_IDS"
-
       - name: Get Latest Launch Template Version
         id: get_latest_version
         run: |
@@ -51,6 +43,7 @@ jobs:
           LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
           echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
 
+# hahah
  # aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
       - name: Update Launch Template with Latest AMI
         run: |
@@ -68,13 +61,15 @@ jobs:
           LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
           echo "Latest Launch Template Version: $LATEST_VERSION"
           echo "LAUNCH_TEMPLATE_NAME=$LAUNCH_TEMPLATE_NAME" >> $GITHUB_ENV
-          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+          echo "LATEST_VERSION=$LATEST_VERSION_NEW" >> $GITHUB_ENV
+
       
       - name: Update ASG to use the latest Launch Template version
         run: |
           ASG_NAME="app-auto-scaling-group"
           LAUNCH_TEMPLATE_NAME="${{ env.LAUNCH_TEMPLATE_NAME }}"
-          LATEST_VERSION=${{ env.LATEST_VERSION }}
+          LATEST_VERSION=${{ env.LATEST_VERSION_NEW }}
+
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
       
       - name: Start Instance Refresh

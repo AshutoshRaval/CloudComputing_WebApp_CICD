@@ -70,7 +70,7 @@ jobs:
         run: |
             AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d':' -f2)
             echo "AMI ID: $AMI_ID"
-            echo "::set-output name=ami_id::$AMI_ID"
+            echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
 
           
 

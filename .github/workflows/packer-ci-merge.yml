@@ -100,6 +100,7 @@ jobs:
       - name: Start Instance Refresh
         run: |
           INSTANCE_REFRESH_ID=$(aws autoscaling start-instance-refresh --auto-scaling-group-name "app-auto-scaling-group" --strategy "Rolling" --query 'InstanceRefreshId' --output text)
+
           echo "Instance Refresh ID: $INSTANCE_REFRESH_ID"
           echo "INSTANCE_REFRESH_ID=$INSTANCE_REFRESH_ID" >> $GITHUB_ENV
 
@@ -107,6 +108,7 @@ jobs:
         run: |
           while true; do
               STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name "app-auto-scaling-group" --instance-refresh-ids "${{ env.INSTANCE_REFRESH_ID }}" --query 'InstanceRefreshes[0].Status' --output text)
+
               if [ "$STATUS" = "Successful" ]; then
                   echo "Instance refresh completed successfully"
                   break

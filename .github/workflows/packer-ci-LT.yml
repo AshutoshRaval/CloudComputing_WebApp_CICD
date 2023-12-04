@@ -36,7 +36,6 @@ jobs:
             echo "AMI ID: $AMI_ID"
             echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
 
-
       - name: Get Security Group IDs
         id: get_security_groups
         run: |

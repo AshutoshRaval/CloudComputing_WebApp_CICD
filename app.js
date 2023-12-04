@@ -83,6 +83,36 @@ app.get('/healthz', async (req, res) => {
   }
 });
 
+
+app.get('/test', async (req, res) => {
+  try {
+    console.log('test initiated')
+    console.log('test initiated')
+    logger.info('Test check initiated');
+    // statsd.gauge('database.connection_success', 1);
+    statsd.increment('endpoint.hits.v1.Test.db');
+    // await sequelize.authenticate(); // Check the database connectivity
+    // logger.info('Database connection has been established successfully.');
+
+    res.status(200).set({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'X-Content-Type-Options': 'nosniff'
+    }).json({ status: 'ok',message: 'New Chaneges have been deployed' });
+
+  } catch (error) {
+    //console.error('Unable to connect to the database:', error);
+    logger.error(`Unable to connect to the test: ${error}`);
+    // statsd.gauge('database.connection_success', 1);
+    // statsd.increment('endpoint.hits.v1.heathz.DB');
+    res.status(503).set({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'X-Content-Type-Options': 'nosniff'
+    }).json({ status: 'error', message: 'Unable to connect to the test' });
+  }
+});
+
 // New POST route for submissions
 app.post('/v1/assignment/:id/submission', basicAuth, createSubmission);
 

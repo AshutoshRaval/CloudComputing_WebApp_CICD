@@ -36,13 +36,16 @@ jobs:
             echo "AMI ID: $AMI_ID"
             echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
 
+ # aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
       - name: Update Launch Template with Latest AMI
         run: |
           echo "Using AMI ID: $AMI_ID" # For debugging: this line will output the AMI ID in the logs
           LAUNCH_TEMPLATE_ID=$(aws ec2 describe-launch-templates --query "LaunchTemplates[?LaunchTemplateName=='app-launch-template'].LaunchTemplateId" --output text)
           echo "Using Launch Template ID: $LAUNCH_TEMPLATE_ID" # For debugging
-          aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
-      
+          echo "Using Launch Template ID: $LATEST" # For debugging
+          INSTANCE_TYPE="t2.micro" 
+          aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\",\"InstanceType\":\"$INSTANCE_TYPE\"}"
+
       - name: Retrieve latest Launch Template version
         run: |
           LAUNCH_TEMPLATE_NAME="app-launch-template"

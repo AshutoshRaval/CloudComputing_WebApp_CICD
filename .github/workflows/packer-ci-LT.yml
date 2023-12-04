@@ -57,16 +57,16 @@ jobs:
         run: |
           LAUNCH_TEMPLATE_NAME="app-launch-template"
           echo "Launch Template Name: $LAUNCH_TEMPLATE_NAME"
-          LATEST_VERSION_NEW=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
+          LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
           echo "Latest Launch Template Version: $LATEST_VERSION"
           echo "LAUNCH_TEMPLATE_NAME=$LAUNCH_TEMPLATE_NAME" >> $GITHUB_ENV
-          echo "LATEST_VERSION=$LATEST_VERSION_NEW" >> $GITHUB_ENV
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
       
       - name: Update ASG to use the latest Launch Template version
         run: |
           ASG_NAME="app-auto-scaling-group"
           LAUNCH_TEMPLATE_NAME="${{ env.LAUNCH_TEMPLATE_NAME }}"
-          LATEST_VERSION=${{ env.LATEST_VERSION_NEW }}
+          LATEST_VERSION=${{env.LATEST_VERSION}}
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
       
       - name: Start Instance Refresh

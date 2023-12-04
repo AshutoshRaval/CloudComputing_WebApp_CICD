@@ -65,14 +65,12 @@ build {
       "cd /home/admin",
       # "cd /opt",
       "unzip webapp.zip", # Unzip the webapp.zip
-
       # "sudo unzip webapp.zip -d csye6225"
       "npm install", # Install Node.js dependencies
       "sudo apt-get install acl",
       "yes | sudo adduser ec2-user",
       "yes | echo 'ec2-user:ec2-user1234' | sudo chpasswd",
       "yes | sudo usermod -aG ec2-user ec2-user",
-
       "sudo chmod +x /home/admin/server.js",
       "sudo setfacl -Rm u:ec2-user:rwx /home/admin",
       "sudo mv /home/admin/webapp.service /etc/systemd/system/",
@@ -108,5 +106,9 @@ build {
       "sudo apt clean",
       "sudo rm -rf /var/lib/apt/lists/*"
     ]
+  }
+   post-processor "manifest" {
+    output = "manifest.json"
+    strip_path = true
   }
 }

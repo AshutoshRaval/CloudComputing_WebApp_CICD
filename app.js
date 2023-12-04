@@ -13,6 +13,7 @@ const { getAssignmentById } = require('./Controller/getAssignmentById');
 const { getAllAssignments } = require('./Controller/getAllAssignments');
 const { deleteAssignmentById } = require('./Controller/deleteAssignmentById');
 const { updateAssignmentById } = require('./Controller/updateAssignmentById');
+const { createSubmission } = require('./Controller/submissionController')
 const logger = require('./Utils/logger');
 const statsd = require('./Utils/statsdClient');
 // const { checkAssignmentapi } = require('./Controller/checkAssignmentapi')
@@ -28,14 +29,8 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error' });
 });
 
-
-
 // Below API create the assignment
 app.post('/v1/assignment', basicAuth, createAssignment);
-// app.post('/v1/assignment', basicAuth,(req, res, next) => {
-  
-//   return createAssignment(req, res, next);
-// } );
 
 //Below API Gets the assignment based on the ID or fecthes all the assignment
 app.get('/v1/assignment', basicAuth, (req, res, next) => {
@@ -88,6 +83,8 @@ app.get('/healthz', async (req, res) => {
   }
 });
 
+// New POST route for submissions
+app.post('/v1/assignment/:id/submission', basicAuth, createSubmission);
 
 app.patch('/v1/assignment', (req, res) => {
   res.status(405).json({ error: 'Method Not Allowed: Use PUT for full updates or specify fields to update with PATCH.' });

@@ -107,8 +107,8 @@ build {
       "sudo rm -rf /var/lib/apt/lists/*"
     ]
   }
-   post-processor "manifest" {
-    output = "manifest.json"
+  post-processor "manifest" {
+    output     = "manifest.json"
     strip_path = true
   }
 }

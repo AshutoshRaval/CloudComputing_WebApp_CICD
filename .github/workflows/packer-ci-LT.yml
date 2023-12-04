@@ -77,7 +77,8 @@ jobs:
           LAUNCH_TEMPLATE_NAME="${{ env.LAUNCH_TEMPLATE_NAME }}"
           LATEST_VERSION=${{env.latest_version_new}}
           echo "Using Launch Template ID: $LATEST_VERSION" # For debugging
-          aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=8"
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
+
       
       - name: Start Instance Refresh
         run: |

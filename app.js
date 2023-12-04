@@ -87,6 +87,7 @@ app.get('/healthz', async (req, res) => {
 app.get('/test', async (req, res) => {
   try {
     console.log('test initiated')
+    console.log('test initiated')
     logger.info('Test check initiated');
     // statsd.gauge('database.connection_success', 1);
     statsd.increment('endpoint.hits.v1.Test.db');

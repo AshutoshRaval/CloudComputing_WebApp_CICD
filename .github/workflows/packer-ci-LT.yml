@@ -11,43 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: npm install
-
+      # - name: Extract AMI ID
+      #   id: extract_ami_id
+      #   run: |
+      #       AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d':' -f2)
+      #       echo "AMI ID: $AMI_ID"
+      #       echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
       - name: Install jq
         run: sudo apt-get install jq
-
-
-      - name: Display .env file
-        run: |
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DB_NAME=TestDataBase1" >> .env
-          echo "PORT=8080" >> .env
-          cat .env
-
-      - name: Configure MySQL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          sudo systemctl start mysql
-          sudo systemctl status mysql
-          mysql -u ${{ secrets.DB_USER }} -p"${{ secrets.DB_PASSWORD }}" -e "CREATE DATABASE TestDataBase1;"
-
-      - name: Run Integration Tests
-        run: npm test
-
-
-      - name: Download webapp repository
-        run: zip -r webapp.zip ./
 
       - name: Configure AWS Credentials
         run: |
@@ -58,31 +29,13 @@ jobs:
               aws configure set profile.dev.aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
               aws configure set profile.dev.aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-
-      - name: Build AMI with Packer
-        run: |
-          packer init .
-          packer fmt -check aws-debian.pkr.hcl
-          packer build aws-debian.pkr.hcl
-
       - name: Extract AMI ID
         id: extract_ami_id
         run: |
-            AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d':' -f2)
+            AMI_ID=ami-063d60a3265ea3153
             echo "AMI ID: $AMI_ID"
             echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
 
-      # # New Steps for Updating AWS Infrastructure
-      # - name: Fetch Latest AMI ID
-      #   id: fetch-latest-ami
-      #   run: |
-      #     LATEST_AMI_ID=$(aws ec2 describe-images --owners self --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' --output text)
-      #     echo "Latest AMI ID: $LATEST_AMI_ID"
-      #     echo "LATEST_AMI_ID=$LATEST_AMI_ID" >> $GITHUB_ENV
-
-      # - name: Update Launch Template with Latest AMI
-      #   run: |          AMI_ID=${{ steps.packer_build.outputs.ami_id }}
-      #     aws ec2 create-launch-template-version --launch-template-id "lt-0abcd1234abcd1234" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"${{ env.LATEST_AMI_ID }}\"}"
       - name: Update Launch Template with Latest AMI
         run: |
           echo "Using AMI ID: $AMI_ID" # For debugging: this line will output the AMI ID in the logs
@@ -90,18 +43,6 @@ jobs:
           echo "Using Launch Template ID: $LAUNCH_TEMPLATE_ID" # For debugging
           aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
       
-      # - name: Update Launch Template with Latest AMI
-      #   run: |
-      #        AMI_ID=${{ steps.ami_id.outputs.ami_id }}
-      #        aws ec2 create-launch-template-version --launch-template-id "lt-0abcd1234abcd1234" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
-
-      # - name: Retrieve latest Launch Template version
-      #   run: |
-      #     LAUNCH_TEMPLATE_NAME="app-launch-template"
-      #     LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
-      #     echo "Latest Launch Template Version: $LATEST_VERSION"
-      #     echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
-
       - name: Retrieve latest Launch Template version
         run: |
           LAUNCH_TEMPLATE_NAME="app-launch-template"
@@ -109,8 +50,7 @@ jobs:
           LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
           echo "Latest Launch Template Version: $LATEST_VERSION"
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
-
-
+      
       - name: Update ASG to use the latest Launch Template version
         run: |
           ASG_NAME="app-auto-scaling-group"
@@ -140,3 +80,4 @@ jobs:
                   sleep 60
               fi
           done
+          

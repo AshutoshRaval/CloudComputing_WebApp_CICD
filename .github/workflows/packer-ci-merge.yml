@@ -72,8 +72,6 @@ jobs:
             echo "AMI ID: $AMI_ID"
             echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
 
-          
-
       # # New Steps for Updating AWS Infrastructure
       # - name: Fetch Latest AMI ID
       #   id: fetch-latest-ami
@@ -83,12 +81,13 @@ jobs:
       #     echo "LATEST_AMI_ID=$LATEST_AMI_ID" >> $GITHUB_ENV
 
       # - name: Update Launch Template with Latest AMI
-      #   run: |
+      #   run: |          AMI_ID=${{ steps.packer_build.outputs.ami_id }}
       #     aws ec2 create-launch-template-version --launch-template-id "lt-0abcd1234abcd1234" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"${{ env.LATEST_AMI_ID }}\"}"
       - name: Update Launch Template with Latest AMI
         run: |
-          AMI_ID=${{ steps.packer_build.outputs.ami_id }}
+          echo "Using AMI ID: $AMI_ID" # For debugging: this line will output the AMI ID in the logs
           LAUNCH_TEMPLATE_ID=$(aws ec2 describe-launch-templates --query "LaunchTemplates[?LaunchTemplateName=='app-launch-template'].LaunchTemplateId" --output text)
+          echo "Using Launch Template ID: $LAUNCH_TEMPLATE_ID" # For debugging
           aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
       
       # - name: Update Launch Template with Latest AMI

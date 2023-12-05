@@ -59,6 +59,9 @@ jobs:
           ASG_NAME=${{secrets.ASG_NAME }}
           LAUNCH_TEMPLATE_NAME=${{secrets.LAUNCH_TEMPLATE_NAME}}
           LATEST_VERSION=${{ env.LATEST_VERSION }}
+          echo "ASG_NAME: $ASG_NAME"
+          echo "LAUNCH_TEMPLATE_NAME: $LAUNCH_TEMPLATE_NAME"
+          echo "LATEST_VERSION: $LATEST_VERSION"
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
       
      - name: Start Instance Refresh

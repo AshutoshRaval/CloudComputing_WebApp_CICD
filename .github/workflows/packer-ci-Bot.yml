@@ -1,0 +1,82 @@
+name: Packer Testing Load Group
+
+on:
+#  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Packer Testing Load Group
+    runs-on: ubuntu-latest
+
+    steps:
+
+     - name: Configure AWS Credentials
+       run: |
+              aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws configure set default.region us-east-1  # Replace with your desired AWS region
+              aws configure set default.output json
+              aws configure set profile.dev.aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws configure set profile.dev.aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    
+     - name: Extract AMI ID
+       run: |
+            echo "AMI_ID= ami-093e31f53ed85082f" >> $GITHUB_ENV
+     
+     - name: Get Latest Launch Template Version
+       id: get_latest_version
+       run: |
+          LAUNCH_TEMPLATE_NAME="app-launch-template"
+          LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
+      
+     - name: Update Launch Template with Latest AMI
+       run: |
+          echo "Using AMI ID: $AMI_ID" # For debugging: this line will output the AMI ID in the logs
+          LAUNCH_TEMPLATE_ID=$(aws ec2 describe-launch-templates --query "LaunchTemplates[?LaunchTemplateName=='app-launch-template'].LaunchTemplateId" --output text)
+          echo "Using Launch Template ID: $LAUNCH_TEMPLATE_ID" # For debugging
+          aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version 1 --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
+      
+     - name: Retrieve latest Launch Template version
+       run: |
+          LAUNCH_TEMPLATE_NAME="app-launch-template"
+          echo "Launch Template Name: $LAUNCH_TEMPLATE_NAME"
+          LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
+          echo "Latest Launch Template Version: $LATEST_VERSION"
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
+
+       #  # ASG_NAME="app-auto-scaling-group"
+
+     - name: Update ASG to use the latest Launch Template version
+       run: |
+          ASG_NAME="app-auto-scaling-group"
+          LAUNCH_TEMPLATE_NAME=""app-launch-template""
+          LATEST_VERSION=${{ env.LATEST_VERSION }}
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
+      
+     - name: Start Instance Refresh
+       run: |
+          INSTANCE_REFRESH_ID=$(aws autoscaling start-instance-refresh --auto-scaling-group-name "app-auto-scaling-group" --strategy "Rolling" --query 'InstanceRefreshId' --output text)
+
+          echo "Instance Refresh ID: $INSTANCE_REFRESH_ID"
+          echo "INSTANCE_REFRESH_ID=$INSTANCE_REFRESH_ID" >> $GITHUB_ENV
+
+     - name: Wait for Instance Refresh Completion
+       run: |
+          while true; do
+              STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name "app-auto-scaling-group" --instance-refresh-ids "${{ env.INSTANCE_REFRESH_ID }}" --query 'InstanceRefreshes[0].Status' --output text)
+
+              if [ "$STATUS" = "Successful" ]; then
+                  echo "Instance refresh completed successfully"
+                  break
+              elif [ "$STATUS" = "Failed" ]; then
+                  echo "Instance refresh failed"
+                  exit 1
+              else
+                  echo "Waiting for instance refresh... Current status: $STATUS"
+                  sleep 60
+              fi
+          done

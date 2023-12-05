@@ -55,9 +55,9 @@ jobs:
 
      - name: Update ASG to use the latest Launch Template version
        run: |
-          
-          ASG_NAME=${{secrets.ASG_NAME }}
-          LAUNCH_TEMPLATE_NAME=${{secrets.LAUNCH_TEMPLATE_NAME}}
+
+          ASG_NAME=${{ secrets.ASG_NAME }}
+          LAUNCH_TEMPLATE_NAME=${{ secrets.LAUNCH_TEMPLATE_NAME }}
           LATEST_VERSION=${{ env.LATEST_VERSION }}
           echo "ASG_NAME: $ASG_NAME"
           echo "LAUNCH_TEMPLATE_NAME: $LAUNCH_TEMPLATE_NAME"

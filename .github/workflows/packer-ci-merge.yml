@@ -96,7 +96,7 @@ jobs:
           echo "Using AMI ID: $AMI_ID" # For debugging: this line will output the AMI ID in the logs
           LAUNCH_TEMPLATE_ID=$(aws ec2 describe-launch-templates --query "LaunchTemplates[?LaunchTemplateName=='app-launch-template'].LaunchTemplateId" --output text)
           echo "Using Launch Template ID: $LAUNCH_TEMPLATE_ID" # For debugging
-          aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
+          aws ec2 create-launch-template-version --launch-template-id "$LAUNCH_TEMPLATE_ID" --source-version 1 --launch-template-data "{\"ImageId\":\"$AMI_ID\"}"
       
       # - name: Update Launch Template with Latest AMI
       #   run: |
@@ -123,7 +123,8 @@ jobs:
       - name: Update ASG to use the latest Launch Template version
         run: |
         
-          ASG_NAME=${{secrets.ASG_NAME }}
+          ASG_NAME="app-auto-scaling-group"
+          LAUNCH_TEMPLATE_NAME="app-launch-template"
           LATEST_VERSION=${{ env.LATEST_VERSION }}
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
       

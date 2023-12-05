@@ -24,7 +24,7 @@ jobs:
     
      - name: Extract AMI ID
        run: |
-            echo "AMI_ID= ami-093e31f53ed85082f" >> $GITHUB_ENV
+            echo "AMI_ID=ami-093e31f53ed85082f" >> $GITHUB_ENV
      
      - name: Get Latest Launch Template Version
        id: get_latest_version

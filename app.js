@@ -114,9 +114,9 @@ app.get('/test', async (req, res) => {
 });
 
 // New POST route for submissions
-app.post('/v1/assignment/:id/submission', basicAuth, createSubmission);
+app.post('/v2/assignment/:id/submission', basicAuth, createSubmission);
 
-app.patch('/v1/assignment', (req, res) => {
+app.patch('/v2/assignment', (req, res) => {
   res.status(405).json({ error: 'Method Not Allowed: Use PUT for full updates or specify fields to update with PATCH.' });
 });
 

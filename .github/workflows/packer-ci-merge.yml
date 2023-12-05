@@ -84,6 +84,13 @@ jobs:
       # - name: Update Launch Template with Latest AMI
       #   run: |          AMI_ID=${{ steps.packer_build.outputs.ami_id }}
       #     aws ec2 create-launch-template-version --launch-template-id "lt-0abcd1234abcd1234" --source-version "$LATEST" --launch-template-data "{\"ImageId\":\"${{ env.LATEST_AMI_ID }}\"}"
+      - name: Get Latest Launch Template Version
+        id: get_latest_version
+        run: |
+          LAUNCH_TEMPLATE_NAME="app-launch-template"
+          LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-name "$LAUNCH_TEMPLATE_NAME" --query 'LaunchTemplateVersions | sort_by(@, &VersionNumber) | [-1].VersionNumber' --output text)
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_ENV
+      
       - name: Update Launch Template with Latest AMI
         run: |
           echo "Using AMI ID: $AMI_ID" # For debugging: this line will output the AMI ID in the logs
@@ -111,9 +118,12 @@ jobs:
           echo "Latest Launch Template Version: $LATEST_VERSION"
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
 
+       #  # ASG_NAME="app-auto-scaling-group"
+
       - name: Update ASG to use the latest Launch Template version
         run: |
-          ASG_NAME="app-auto-scaling-group"
+        
+          ASG_NAME=${{secrets.ASG_NAME }}
           LATEST_VERSION=${{ env.LATEST_VERSION }}
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
       

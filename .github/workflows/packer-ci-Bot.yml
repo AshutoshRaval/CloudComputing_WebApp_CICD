@@ -61,8 +61,9 @@ jobs:
        run: |
           INSTANCE_REFRESH_ID=$(aws autoscaling start-instance-refresh --auto-scaling-group-name "app-auto-scaling-group" --strategy "Rolling" --query 'InstanceRefreshId' --output text)
 
-          echo "Instance Refresh ID: $INSTANCE_REFRESH_ID"
-          echo "INSTANCE_REFRESH_ID=$INSTANCE_REFRESH_ID" >> $GITHUB_ENV
+
+           echo "Instance Refresh ID: $INSTANCE_REFRESH_ID"
+           echo "INSTANCE_REFRESH_ID=$INSTANCE_REFRESH_ID" >> $GITHUB_ENV
 
      - name: Wait for Instance Refresh Completion
        run: |
@@ -80,3 +81,4 @@ jobs:
                   sleep 60
               fi
           done
+

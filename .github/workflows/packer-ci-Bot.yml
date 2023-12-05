@@ -51,7 +51,7 @@ jobs:
 
        #  # ASG_NAME="app-auto-scaling-group"
        # ASG_NAME="app-auto-scaling-group"
-       # LAUNCH_TEMPLATE_NAME=""app-launch-template""
+       # LAUNCH_TEMPLATE_NAME=""app-launch-template""s
 
      - name: Update ASG to use the latest Launch Template version
        run: |

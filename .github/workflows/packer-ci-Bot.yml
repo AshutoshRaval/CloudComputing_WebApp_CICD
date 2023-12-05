@@ -15,12 +15,12 @@ jobs:
 
      - name: Configure AWS Credentials
        run: |
-              aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-              aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws configure set aws_access_key_id ${{ secrets.AWS_DEMO_ACCESS_KEY_ID }}
+              aws configure set aws_secret_access_key ${{ secrets.AWS_DEMO_SECRET_ACCESS_KEY }}
               aws configure set default.region us-east-1  # Replace with your desired AWS region
               aws configure set default.output json
-              aws configure set profile.dev.aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-              aws configure set profile.dev.aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws configure set profile.demo.aws_access_key_id ${{ secrets.AWS_DEMO_ACCESS_KEY_ID }}
+              aws configure set profile.demo.aws_secret_access_key ${{ secrets.AWS_DEMO_SECRET_ACCESS_KEY }}
     
      - name: Extract AMI ID
        run: |
@@ -50,11 +50,14 @@ jobs:
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
 
        #  # ASG_NAME="app-auto-scaling-group"
+       # ASG_NAME="app-auto-scaling-group"
+       # LAUNCH_TEMPLATE_NAME=""app-launch-template""
 
      - name: Update ASG to use the latest Launch Template version
        run: |
-          ASG_NAME="app-auto-scaling-group"
-          LAUNCH_TEMPLATE_NAME=""app-launch-template""
+          
+          ASG_NAME=${{secrets.ASG_NAME }}
+          LAUNCH_TEMPLATE_NAME=${{secrets.LAUNCH_TEMPLATE_NAME}}
           LATEST_VERSION=${{ env.LATEST_VERSION }}
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
       

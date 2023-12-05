@@ -30,10 +30,10 @@ app.use((err, req, res, next) => {
 });
 
 // Below API create the assignment
-app.post('/v1/assignment', basicAuth, createAssignment);
+app.post('/v2/assignment', basicAuth, createAssignment);
 
 //Below API Gets the assignment based on the ID or fecthes all the assignment
-app.get('/v1/assignment', basicAuth, (req, res, next) => {
+app.get('/v2/assignment', basicAuth, (req, res, next) => {
 // app.get('v1/assignment/', basicAuth, (req, res, next) => {
       console.log('by Id')
       logger.info(`Fetching assignment by ID: ${req.query.id}`);
@@ -42,7 +42,7 @@ app.get('/v1/assignment', basicAuth, (req, res, next) => {
       //return getAssignmentById(req, res, next);
 });
 
-app.get('/v1/assignment/:id',basicAuth, (req, res, next) => {
+app.get('/v2/assignment/:id',basicAuth, (req, res, next) => {
   logger.info('Fetching all assignments');
   console.log('All Assignment')
   statsd.increment('endpoint.hits.v1.assignment.all');
@@ -50,10 +50,10 @@ app.get('/v1/assignment/:id',basicAuth, (req, res, next) => {
 });
 
 //Below API delete all the assignment
-app.delete('/v1/assignment/:id', basicAuth, deleteAssignmentById);
+app.delete('/v2/assignment/:id', basicAuth, deleteAssignmentById);
 
 //Below API update the assignment
-app.put('/v1/assignment/:id', basicAuth, updateAssignmentById);
+app.put('/v2/assignment/:id', basicAuth, updateAssignmentById);
 
 app.get('/healthz', async (req, res) => {
   try {

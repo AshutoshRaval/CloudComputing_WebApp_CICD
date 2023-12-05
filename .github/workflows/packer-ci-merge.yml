@@ -67,6 +67,13 @@ jobs:
           packer fmt -check aws-debian.pkr.hcl
           packer build aws-debian.pkr.hcl
 
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1-node16
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_DEMO_ACCESS_KEY }}
+      #     aws-secret-access-key: ${{ secrets.AWS_DEMO_SECRET_KEY }}
+      #     aws-region: us-east-1
+
       - name: Extract AMI ID
         id: extract_ami_id
         run: |
@@ -123,9 +130,9 @@ jobs:
 
       - name: Update ASG to use the latest Launch Template version
         run: |
-        
-          ASG_NAME="app-auto-scaling-group"
-          LAUNCH_TEMPLATE_NAME="app-launch-template"
+
+          ASG_NAME=${{secrets.ASG_NAME }}
+          LAUNCH_TEMPLATE_NAME=${{secrets.LAUNCH_TEMPLATE_NAME}}
           LATEST_VERSION=${{ env.LATEST_VERSION }}
           aws autoscaling update-auto-scaling-group --auto-scaling-group-name "$ASG_NAME" --launch-template "LaunchTemplateName=$LAUNCH_TEMPLATE_NAME,Version=$LATEST_VERSION"
       

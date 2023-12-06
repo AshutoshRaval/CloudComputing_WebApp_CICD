@@ -1,9 +1,11 @@
 name: Packer CI Merged
 
 on:
-  push:
-    branches:
-      - main
+ workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+
 
 
 jobs:

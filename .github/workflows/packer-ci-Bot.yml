@@ -1,10 +1,10 @@
 name: Packer Testing Load Group
 
 on:
- workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+#  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -21,10 +21,11 @@ jobs:
               aws configure set default.output json
               aws configure set profile.demo.aws_access_key_id ${{ secrets.AWS_DEMO_ACCESS_KEY_ID }}
               aws configure set profile.demo.aws_secret_access_key ${{ secrets.AWS_DEMO_SECRET_ACCESS_KEY }}
-    
+    #  echo "AMI_ID=ami-093e31f53ed85082f" >> $GITHUB_ENV
      - name: Extract AMI ID
        run: |
-            echo "AMI_ID=ami-093e31f53ed85082f" >> $GITHUB_ENV
+            echo "AMI_ID=ami-0421eef52bab5a0a0" >> $GITHUB_ENV
+           
 
      
      - name: Get Latest Launch Template Version
